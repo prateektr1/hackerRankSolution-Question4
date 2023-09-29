@@ -1,0 +1,37 @@
+@RestController
+@RequestMapping("/api")
+public class CashSettlementController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private TransactionService transactionService;
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody UserDto userDto) {
+        userService.registerNewUser(userDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        // Authenticate user and generate JWT token
+        // Return the token in the response
+        return ResponseEntity.ok(new JwtResponse(token));
+    }
+
+    @PostMapping("/borrow")
+    public ResponseEntity<?> borrow(@RequestBody TransactionDto transactionDto) {
+        // Record borrowing transaction
+        transactionService.recordBorrow(transactionDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/report")
+    public ResponseEntity<?> generateReport(@RequestParam String sortParam, @RequestParam String sortOrder) {
+        // Generate and return a report based on sorting parameters
+        List<Transaction> transactions = transactionService.generateReport(sortParam, sortOrder);
+        return ResponseEntity.ok(transactions);
+    }
+}
